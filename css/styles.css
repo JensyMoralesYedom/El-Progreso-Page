@@ -47,19 +47,20 @@ h1, h2, h3, h4, h5, h6 {
 
 /* --- Variables CSS --- */
 :root {
-  --verde-oscuro: #2D5016;
-  --verde-medio: #3A6B1E;
-  --verde-claro: #4A7C2E;
-  --verde-suave: #6B9B37;
-  --marron: #8B4513;
-  --marron-claro: #A0522D;
-  --crema: #F5F0E1;
-  --crema-oscuro: #E8DFC8;
+  --verde-oscuro: #00420C;
+  --verde-medio: #005C12;
+  --verde-claro: #007A19;
+  --verde-suave: #009920;
+  --verde-claro-bg: #E8F5E9;
+  --marron: #5D4037;
+  --marron-claro: #795548;
+  --crema: #F1F8E9;
+  --crema-oscuro: #DCEDC8;
   --blanco: #FFFFFF;
-  --negro: #333333;
-  --negro-claro: #555555;
-  --sombra: 0 4px 15px rgba(0, 0, 0, 0.1);
-  --sombra-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --negro: #212121;
+  --negro-claro: #616161;
+  --sombra: 0 4px 15px rgba(0, 66, 12, 0.1);
+  --sombra-hover: 0 8px 25px rgba(0, 66, 12, 0.2);
   --transicion: all 0.3s ease;
   --border-radius: 12px;
   --max-width: 1200px;
@@ -159,7 +160,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .header.scrolled {
-  background: rgba(45, 80, 22, 0.95);
+  background: rgba(0, 66, 12, 0.95);
   backdrop-filter: blur(10px);
   padding: 10px 0;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
@@ -261,7 +262,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   position: relative;
-  background: linear-gradient(135deg, rgba(45, 80, 22, 0.85), rgba(74, 124, 46, 0.75)),
+  background: linear-gradient(135deg, rgba(0, 66, 12, 0.9), rgba(0, 122, 25, 0.75)),
     url('../img/banner.jpg') center/cover no-repeat;
   text-align: center;
   color: var(--blanco);
@@ -734,7 +735,7 @@ h1, h2, h3, h4, h5, h6 {
 .galeria-item .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(45, 80, 22, 0.8), transparent);
+  background: linear-gradient(to top, rgba(0, 66, 12, 0.8), transparent);
   display: flex;
   align-items: flex-end;
   padding: 20px;
@@ -901,7 +902,7 @@ h1, h2, h3, h4, h5, h6 {
 .form-group select:focus {
   outline: none;
   border-color: var(--verde-claro);
-  box-shadow: 0 0 0 3px rgba(74, 124, 46, 0.15);
+  box-shadow: 0 0 0 3px rgba(0, 66, 12, 0.15);
 }
 
 .form-group textarea {

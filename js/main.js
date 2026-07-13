@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gap: '15px',
       maxWidth: '450px',
       animation: 'slideInRight 0.4s ease',
-      background: type === 'success' ? 'linear-gradient(135deg, #2D5016, #4A7C2E)' : 
+      background: type === 'success' ? 'linear-gradient(135deg, #00420C, #007A19)' : 
                   type === 'error' ? 'linear-gradient(135deg, #c0392b, #e74c3c)' : 
                   'linear-gradient(135deg, #2980b9, #3498db)',
       color: '#fff',
