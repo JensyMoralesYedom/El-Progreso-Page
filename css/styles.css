@@ -175,31 +175,15 @@ h1, h2, h3, h4, h5, h6 {
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
 }
 
-.logo-icon {
-  width: 50px;
-  height: 50px;
+.logo-img {
+  height: 64px;
+  width: 64px;
+  object-fit: contain;
   background: var(--blanco);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.logo-text h1 {
-  font-size: 1.4rem;
-  color: var(--blanco);
-  letter-spacing: 1px;
-}
-
-.logo-text span {
-  font-size: 0.75rem;
-  color: var(--crema);
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  padding: 2px;
 }
 
 /* --- Menú de Navegación --- */
@@ -941,6 +925,18 @@ h1, h2, h3, h4, h5, h6 {
 .footer-about h3 {
   font-size: 1.5rem;
   margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo {
+  height: 38px;
+  width: 38px;
+  object-fit: contain;
+  background: var(--blanco);
+  border-radius: 50%;
+  padding: 2px;
 }
 
 .footer-about p {
