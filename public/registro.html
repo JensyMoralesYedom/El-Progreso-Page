@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Finca Ganadera El Progreso</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/gestion.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="logo-section">
+        <img src="img/Logo.png" alt="Logo El Progreso">
+        <h2>Crear Cuenta</h2>
+        <p>Regístrese para acceder al sistema</p>
+      </div>
+
+      <div class="auth-error" id="registroError"></div>
+
+      <form id="registroForm">
+        <div class="form-group">
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" placeholder="Su nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" placeholder="correo@ejemplo.com" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar contraseña</label>
+          <input type="password" id="confirmPassword" placeholder="Repita su contraseña" required>
+        </div>
+        <button type="submit" class="btn-auth" id="btnRegistro">
+          <i class="fas fa-user-plus"></i> Registrarse
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        ¿Ya tiene cuenta? <a href="login.html">Inicie sesión</a>
+      </div>
+      <div class="auth-footer" style="margin-top: 0.5rem;">
+        <a href="index.html"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (Auth.isLoggedIn()) {
+        window.location.href = 'gestion.html';
+        return;
+      }
+
+      const registroForm = document.getElementById('registroForm');
+      const btnRegistro = document.getElementById('btnRegistro');
+      const registroError = document.getElementById('registroError');
+
+      function showError(msg) {
+        registroError.textContent = msg;
+        registroError.classList.add('show');
+      }
+
+      function hideError() {
+        registroError.classList.remove('show');
+      }
+
+      registroForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        hideError();
+
+        const nombre = document.getElementById('nombre').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (!nombre || !email || !password || !confirmPassword) {
+          showError('Todos los campos son obligatorios.');
+          return;
+        }
+
+        if (password.length < 6) {
+          showError('La contraseña debe tener al menos 6 caracteres.');
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError('Las contraseñas no coinciden.');
+          return;
+        }
+
+        btnRegistro.disabled = true;
+        btnRegistro.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
+
+        try {
+          const result = await Auth.registro(nombre, email, password);
+
+          if (result.success) {
+            window.location.href = 'login.html';
+          } else {
+            showError(result.error || 'Error al registrar usuario');
+          }
+        } catch (err) {
+          showError('Error de conexión. Intente nuevamente.');
+        } finally {
+          btnRegistro.disabled = false;
+          btnRegistro.innerHTML = '<i class="fas fa-user-plus"></i> Registrarse';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
