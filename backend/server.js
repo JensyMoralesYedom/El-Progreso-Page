@@ -11,8 +11,8 @@ const PORT = process.env.PORT || 3000;
 // Middleware para parsear JSON
 app.use(express.json());
 
-// Servir archivos estáticos desde la carpeta public
-app.use(express.static(path.join(__dirname, 'public')));
+// Servir archivos estáticos desde la carpeta frontend
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Rutas API
 app.use('/api/auth', authRoutes);
@@ -20,7 +20,7 @@ app.use('/api/ganado', ganadoRoutes);
 
 // Ruta para servir index.html como fallback
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
 
 app.listen(PORT, () => {

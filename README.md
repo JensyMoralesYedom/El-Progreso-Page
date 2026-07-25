@@ -28,6 +28,7 @@ cd El-Progreso-Page
 ### 2. Instalar dependencias
 
 ```bash
+cd backend
 npm install
 ```
 
@@ -42,12 +43,12 @@ CREATE DATABASE elprogreso;
 Ejecutar el script de tablas y datos de prueba:
 
 ```bash
-psql -U postgres -d elprogreso -f server/init.sql
+psql -U postgres -d elprogreso -f init.sql
 ```
 
 ### 4. Configurar variables de entorno
 
-Editar el archivo `.env` con las credenciales de su PostgreSQL:
+Editar el archivo `backend/.env` con las credenciales de su PostgreSQL:
 
 ```
 DB_HOST=localhost
@@ -83,7 +84,18 @@ Para acceder como **Invitado**, hacer clic en el botón "Entrar como Invitado" e
 
 ```
 landingELProgreso/
-├── public/                    Archivos estáticos
+├── backend/                   Servidor y lógica del negocio
+│   ├── server.js              Punto de entrada Express
+│   ├── package.json           Dependencias del backend
+│   ├── .env                   Variables de entorno
+│   └── server/
+│       ├── db.js              Conexión a PostgreSQL
+│       ├── middleware/
+│       │   └── auth.js        Middleware de autenticación JWT
+│       └── routes/
+│           ├── auth.js        Rutas de login, registro, invitado
+│           └── ganado.js      Rutas CRUD de ganado
+├── frontend/                  Archivos estáticos del cliente
 │   ├── index.html             Landing page principal
 │   ├── login.html             Formulario de login
 │   ├── registro.html          Formulario de registro
@@ -98,17 +110,8 @@ landingELProgreso/
 │   │   ├── gestion.js         CRUD de ganado
 │   │   └── reportes.js        Carga de reportes
 │   └── img/                   Imágenes del sitio
-├── server/
-│   ├── db.js                  Conexión a PostgreSQL
-│   ├── init.sql               Script de tablas + datos prueba
-│   ├── middleware/
-│   │   └── auth.js            Middleware de autenticación JWT
-│   └── routes/
-│       ├── auth.js            Rutas de login, registro, invitado
-│       └── ganado.js          Rutas CRUD de ganado
-├── server.js                  Punto de entrada Express
-├── package.json
-├── .env                       Variables de entorno
+├── init.sql                   Script de tablas + datos prueba
+├── README.md                  Documentación del proyecto
 └── .gitignore
 ```
 
