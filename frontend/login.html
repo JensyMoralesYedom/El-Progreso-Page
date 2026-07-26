@@ -55,8 +55,11 @@
   <script src="js/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirect = urlParams.get('redirect') || 'gestion.html';
+
       if (Auth.isLoggedIn()) {
-        window.location.href = 'gestion.html';
+        window.location.href = redirect;
         return;
       }
 
@@ -94,7 +97,7 @@
 
           if (result.success) {
             Auth.setSession(result.token, result.user);
-            window.location.href = 'gestion.html';
+            window.location.href = redirect;
           } else {
             showError(result.error || 'Credenciales incorrectas');
           }
@@ -116,7 +119,7 @@
 
           if (result.success) {
             Auth.setSession(result.token, result.user);
-            window.location.href = 'gestion.html';
+            window.location.href = redirect;
           } else {
             showError('Error al acceder como invitado');
           }

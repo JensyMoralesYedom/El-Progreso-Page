@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   const token = Auth.getToken();
   if (!token) {
-    window.location.href = 'login.html';
+    window.location.href = 'login.html?redirect=gestion.html';
     return;
   }
 

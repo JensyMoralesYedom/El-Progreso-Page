@@ -11,6 +11,116 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/gestion.css">
+  <style>
+    .filters-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding: 1.25rem;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      align-items: flex-end;
+    }
+    .filters-bar .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+      min-width: 150px;
+    }
+    .filters-bar .filter-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--stone);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .filters-bar .filter-group select {
+      padding: 0.6rem 0.85rem;
+      border: 2px solid var(--cream-dark);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      background: var(--cream);
+      color: var(--carbon);
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .filters-bar .filter-group select:focus {
+      outline: none;
+      border-color: var(--leaf);
+      box-shadow: 0 0 0 3px rgba(42, 125, 82, 0.15);
+      background: var(--white);
+    }
+    .btn-clear-filters {
+      padding: 0.6rem 1.2rem;
+      background: var(--cream);
+      color: var(--stone);
+      border: 2px solid var(--cream-dark);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .btn-clear-filters:hover {
+      background: var(--cream-dark);
+      color: var(--carbon);
+      border-color: var(--stone-light);
+    }
+    .export-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .btn-export {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-export:hover {
+      transform: translateY(-1px);
+    }
+    .btn-export-pdf {
+      background: #FEF2F2;
+      color: #B91C1C;
+    }
+    .btn-export-pdf:hover {
+      background: #FECACA;
+      box-shadow: 0 2px 8px rgba(185, 28, 28, 0.2);
+    }
+    .btn-export-excel {
+      background: #F0FDF4;
+      color: #15803D;
+    }
+    .btn-export-excel:hover {
+      background: #DCFCE7;
+      box-shadow: 0 2px 8px rgba(21, 128, 61, 0.2);
+    }
+    @media (max-width: 768px) {
+      .filters-bar {
+        flex-direction: column;
+      }
+      .filters-bar .filter-group {
+        min-width: 100%;
+      }
+      .export-buttons {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -32,10 +142,48 @@
     <h2 class="page-title">Reporte de Ganado</h2>
     <p class="page-subtitle">Informe completo de todos los registros de ganado en la finca</p>
 
+    <!-- Barra de filtros -->
+    <div class="filters-bar">
+      <div class="filter-group">
+        <label for="filtroEstado">Estado Sanitario</label>
+        <select id="filtroEstado">
+          <option value="">Todos</option>
+          <option value="Bueno">Bueno</option>
+          <option value="Regular">Regular</option>
+          <option value="Crítico">Crítico</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filtroSexo">Sexo</label>
+        <select id="filtroSexo">
+          <option value="">Todos</option>
+          <option value="Macho">Macho</option>
+          <option value="Hembra">Hembra</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filtroRaza">Raza</label>
+        <select id="filtroRaza">
+          <option value="">Todas</option>
+        </select>
+      </div>
+      <button class="btn-clear-filters" id="btnClearFilters"><i class="fas fa-times"></i> Limpiar</button>
+    </div>
+
     <div class="data-table-container">
       <div class="table-header">
         <h3><i class="fas fa-file-alt"></i> Informe General</h3>
-        <span id="totalRegistros" style="color: #666; font-size: 0.9rem;"></span>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <span id="totalRegistros" style="color: #666; font-size: 0.9rem;"></span>
+          <div class="export-buttons">
+            <button class="btn-export btn-export-pdf" id="btnExportPDF" title="Exportar como PDF">
+              <i class="fas fa-file-pdf"></i> PDF
+            </button>
+            <button class="btn-export btn-export-excel" id="btnExportExcel" title="Exportar como Excel">
+              <i class="fas fa-file-excel"></i> Excel
+            </button>
+          </div>
+        </div>
       </div>
       <table class="data-table">
         <thead>
@@ -60,6 +208,9 @@
   </div>
 
   <script src="js/auth.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="js/reportes.js"></script>
 </body>
 </html>

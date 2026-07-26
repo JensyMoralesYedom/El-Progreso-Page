@@ -28,8 +28,9 @@ const Auth = {
 
   async verificarAutenticacion() {
     const token = this.getToken();
+    const page = window.location.pathname.split('/').pop() || 'gestion.html';
     if (!token) {
-      window.location.href = 'login.html';
+      window.location.href = 'login.html?redirect=' + encodeURIComponent(page);
       return null;
     }
 
@@ -40,7 +41,7 @@ const Auth = {
 
       if (!response.ok) {
         this.clearSession();
-        window.location.href = 'login.html';
+        window.location.href = 'login.html?redirect=' + encodeURIComponent(page);
         return null;
       }
 
@@ -48,7 +49,7 @@ const Auth = {
       return data.user;
     } catch (err) {
       this.clearSession();
-      window.location.href = 'login.html';
+      window.location.href = 'login.html?redirect=' + encodeURIComponent(page);
       return null;
     }
   },
