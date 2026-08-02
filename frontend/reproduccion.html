@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reproducción - Finca Ganadera El Progreso</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/gestion.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="shell-body" data-page="reproduccion">
+
+  <div class="shell-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="shell-main">
+      <header class="shell-header" id="shellHeader"></header>
+
+      <main class="shell-content">
+        <h2 class="page-title">Reproducción</h2>
+        <p class="page-subtitle">Montas, gestaciones y partos</p>
+
+        <div class="readonly-banner" id="readonlyBanner" style="display:none;">
+          <i class="fas fa-eye"></i> <span>Modo solo lectura. Para realizar cambios, inicie sesión con un rol autorizado.</span>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="montas"><i class="fas fa-venus-mars"></i> Montas</button>
+          <button class="tab" data-tab="gestaciones"><i class="fas fa-baby"></i> Gestaciones</button>
+          <button class="tab" data-tab="partos"><i class="fas fa-baby-carriage"></i> Partos</button>
+        </div>
+
+        <!-- ========== PESTAÑA MONTAS ========== -->
+        <div class="tab-panel active" id="panel-montas">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-venus-mars"></i> Registro de montas</h3>
+              <button class="btn-new" id="btnNewMonta" style="display:none;">
+                <i class="fas fa-plus"></i> Nueva Monta
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Macho</th>
+                  <th>Hembra</th>
+                  <th>Tipo</th>
+                  <th>Resultado</th>
+                  <th>Observaciones</th>
+                  <th id="colAccionesMon" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="montaBody">
+                <tr><td colspan="8" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando montas...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA GESTACIONES ========== -->
+        <div class="tab-panel" id="panel-gestaciones">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-baby"></i> Gestaciones</h3>
+              <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+                <select id="filtroEstadoGestacion" style="padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;background:var(--cream);">
+                  <option value="">Todos los estados</option>
+                  <option value="En curso">En curso</option>
+                  <option value="Finalizada">Finalizada</option>
+                  <option value="Abortada">Abortada</option>
+                </select>
+                <button class="btn-new" id="btnNewGestacion" style="display:none;">
+                  <i class="fas fa-plus"></i> Nueva Gestación
+                </button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Hembra</th>
+                  <th>Inicio</th>
+                  <th>Parto estimado</th>
+                  <th>Estado</th>
+                  <th>Resultado</th>
+                  <th>Cría</th>
+                  <th id="colAccionesGes" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="gestacionBody">
+                <tr><td colspan="8" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando gestaciones...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA PARTOS ========== -->
+        <div class="tab-panel" id="panel-partos">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-baby-carriage"></i> Registrar parto</h3>
+              <button class="btn-new" id="btnNewParto" style="display:none;">
+                <i class="fas fa-plus"></i> Registrar Parto
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Hembra</th>
+                  <th>Inicio</th>
+                  <th>Parto estimado</th>
+                  <th>Cría</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="partoBody">
+                <tr><td colspan="6" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando gestaciones en curso...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== MODAL MONTA ========== -->
+  <div class="modal-overlay" id="montaModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="montaTitle">Nueva Monta</h3>
+        <button class="modal-close" id="montaClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="montaForm">
+          <input type="hidden" id="montaId">
+          <div class="form-group">
+            <label for="monHembra">Hembra *</label>
+            <select id="monHembra" required>
+              <option value="">Seleccione una hembra</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="monMacho">Macho</label>
+            <select id="monMacho">
+              <option value="">Seleccione un macho</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="monFecha">Fecha</label>
+              <input type="date" id="monFecha">
+            </div>
+            <div class="form-group">
+              <label for="monTipo">Tipo</label>
+              <select id="monTipo">
+                <option value="Natural">Natural</option>
+                <option value="Inseminación">Inseminación</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="monResultado">Resultado</label>
+            <input type="text" id="monResultado" maxlength="100" placeholder="Ej: Concepción confirmada">
+          </div>
+          <div class="form-group">
+            <label for="monObs">Observaciones</label>
+            <textarea id="monObs" maxlength="300" rows="2" placeholder="Comentarios"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="montaCancel">Cancelar</button>
+        <button class="btn-save" id="montaSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL GESTACIÓN ========== -->
+  <div class="modal-overlay" id="gestacionModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="gestacionTitle">Nueva Gestación</h3>
+        <button class="modal-close" id="gestacionClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="gestacionForm">
+          <input type="hidden" id="gestacionId">
+          <div class="form-group">
+            <label for="gesHembra">Hembra *</label>
+            <select id="gesHembra" required>
+              <option value="">Seleccione una hembra</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="gesMonta">Monta asociada</label>
+            <select id="gesMonta">
+              <option value="">Sin monta asociada</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="gesInicio">Fecha de inicio *</label>
+              <input type="date" id="gesInicio" required>
+            </div>
+            <div class="form-group">
+              <label for="gesPartoEstimado">Parto estimado</label>
+              <input type="date" id="gesPartoEstimado">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="gesEstado">Estado</label>
+              <select id="gesEstado">
+                <option value="En curso">En curso</option>
+                <option value="Finalizada">Finalizada</option>
+                <option value="Abortada">Abortada</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="gesResultado">Resultado</label>
+              <select id="gesResultado">
+                <option value="">Seleccione</option>
+                <option value="Normal">Normal</option>
+                <option value="Difícil">Difícil</option>
+                <option value="Aborto">Aborto</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gesObs">Observaciones</label>
+            <textarea id="gesObs" maxlength="300" rows="2" placeholder="Comentarios"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="gestacionCancel">Cancelar</button>
+        <button class="btn-save" id="gestacionSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL PARTO ========== -->
+  <div class="modal-overlay" id="partoModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3>Registrar Parto</h3>
+        <button class="modal-close" id="partoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="partoForm">
+          <div class="form-group">
+            <label for="parGestacion">Gestación en curso *</label>
+            <select id="parGestacion" required>
+              <option value="">Seleccione una gestación</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="parFecha">Fecha del parto</label>
+              <input type="date" id="parFecha">
+            </div>
+            <div class="form-group">
+              <label for="parResultado">Resultado</label>
+              <select id="parResultado">
+                <option value="Normal">Normal</option>
+                <option value="Difícil">Difícil</option>
+                <option value="Aborto">Aborto</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row" id="parCriaFields">
+            <div class="form-group">
+              <label for="parArete">Arete de la cría *</label>
+              <input type="text" id="parArete" maxlength="50" placeholder="Ej: GAN-C-001">
+            </div>
+            <div class="form-group">
+              <label for="parNombre">Nombre de la cría *</label>
+              <input type="text" id="parNombre" maxlength="100" placeholder="Nombre del becerro">
+            </div>
+          </div>
+          <div class="form-row" id="parCriaFields2">
+            <div class="form-group">
+              <label for="parSexo">Sexo de la cría *</label>
+              <select id="parSexo">
+                <option value="">Seleccione</option>
+                <option value="Macho">Macho</option>
+                <option value="Hembra">Hembra</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="parPeso">Peso de la cría (kg)</label>
+              <input type="number" id="parPeso" step="0.01" min="0" placeholder="Ej: 35">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="partoCancel">Cancelar</button>
+        <button class="btn-save" id="partoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL CONFIRMAR ELIMINACIÓN ========== -->
+  <div class="modal-overlay confirm-modal" id="confirmModal">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="confirm-text">¿Está seguro de eliminar este registro?</div>
+        <div class="confirm-subtext" id="confirmSubtext">Esta acción no se puede deshacer.</div>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-cancel" id="btnConfirmCancel">Cancelar</button>
+        <button class="btn-confirm-delete" id="btnConfirmDelete">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/reproduccion.js"></script>
+</body>
+</html>

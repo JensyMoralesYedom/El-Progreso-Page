@@ -221,39 +221,43 @@ Rutas nuevas en `backend/server/routes/` (cada archivo usa `verificarToken` y, d
 - [x] Migración automática del esquema anterior de `ganado` (texto `ubicacion` → FK `potrero_id`).
 - [x] Datos de prueba para potreros, movimientos, salud, reproducción, producción, alimentación, empleados, tareas, pagos, productos, inventario y finanzas.
 
-### Fase 2 — Backend base
-- [ ] Ampliar `auth.js`: registro/login soportando roles `trabajador` y `veterinario`.
-- [ ] Ampliar `/api/ganado` con `estado`, `origen`, `fecha_compra`, `precio_compra`, `madre_id`, `padre_id`.
-- [ ] Crear `/api/ganado/movimientos` y `/api/ganado/traslados`.
-- [ ] Crear `/api/potreros`.
-- [ ] Crear `/api/dashboard` con los KPIs.
+### Fase 2 — Backend base ✅ (ejecutada)
+- [x] Ampliar `auth.js`: registro/login soportando roles `trabajador` y `veterinario`.
+- [x] Ampliar `/api/ganado` con `estado`, `origen`, `fecha_compra`, `precio_compra`, `madre_id`, `padre_id`.
+- [x] Crear `/api/ganado/movimientos` y `/api/ganado/traslados`.
+- [x] Crear `/api/potreros`.
+- [x] Crear `/api/dashboard` con los KPIs.
 
-### Fase 3 — Backend módulos
-- [ ] `/api/salud`: vacunaciones, tratamientos, visitas e historial.
-- [ ] `/api/reproduccion`: montas, gestaciones, partos con alta de crías.
-- [ ] `/api/produccion`: registro y totales de leche.
-- [ ] `/api/alimentacion`: raciones por potrero/animal.
-- [ ] `/api/finanzas`: movimientos, pagos y saldo.
-- [ ] `/api/empleados`: empleados y tareas.
-- [ ] `/api/inventario`: productos, movimientos y alertas de stock.
+### Fase 3 — Backend módulos ✅ (ejecutada)
+- [x] `/api/salud`: vacunaciones, tratamientos, visitas e historial.
+- [x] `/api/reproduccion`: montas, gestaciones, partos con alta de crías.
+- [x] `/api/produccion`: registro y totales de leche.
+- [x] `/api/alimentacion`: raciones por potrero/animal.
+- [x] `/api/finanzas`: movimientos, pagos y saldo.
+- [x] `/api/empleados`: empleados y tareas.
+- [x] `/api/inventario`: productos, movimientos y alertas de stock.
 
 ### Fase 4 — Frontend shell
-- [ ] Crear `dashboard.html` con KPIs y menú lateral de módulos.
-- [ ] Adaptar `gestion.html` al inventario completo de ganado.
-- [ ] Actualizar `auth.js` para los nuevos roles.
+- [x] Crear `dashboard.html` con KPIs y menú lateral de módulos.
+- [x] Adaptar `gestion.html` al inventario completo de ganado.
+- [x] Actualizar `auth.js` para los nuevos roles.
+- [x] Login/registro redirigen a `dashboard.html` y registro permite elegir rol.
 
 ### Fase 5 — Frontend módulos
-- [ ] Páginas CRUD de salud, reproducción, producción, alimentación, finanzas, empleados e inventario, reutilizando tablas/modales/notificaciones actuales.
-- [ ] Control de UI por rol (ocultar botones de creación/edición/eliminación para roles sin permiso).
+- [x] Páginas CRUD de salud, reproducción, producción, alimentación, finanzas, empleados e inventario, reutilizando tablas/modales/notificaciones actuales.
+- [x] Control de UI por rol (ocultar botones de creación/edición/eliminación para roles sin permiso).
 
-### Fase 6 — Reportes
-- [ ] Reportes por módulo con filtros y exportación PDF/Excel.
+### Fase 6 — Reportes ✅ (ejecutada)
+- [x] Reportes por módulo con filtros y exportación PDF/Excel (`frontend/reportes.html` + `frontend/js/reportes.js`).
+- [x] 16 reportes config-driven con selector de módulo, rango de fechas y filtros dinámicos (razas, categorías, estados).
+- [x] Filtrado por rol de cada reporte (fincanzas/invitado, inventario/veterinario, etc.) y resumen de totales.
+- [x] Exportación PDF (jsPDF + autotable) y Excel (SheetJS) con encabezado y filtros aplicados.
 
-### Fase 7 — Pulido y pruebas
-- [ ] Validaciones frontend/backend por módulo.
-- [ ] Pruebas de flujos completos (parto→cría, venta→movimiento, entrada→stock).
-- [ ] Pruebas de permisos por rol.
-- [ ] Revisión visual responsive y consistencia de estilos.
+### Fase 7 — Pulido y pruebas ✅ (ejecutada)
+- [x] Validaciones frontend/backend por módulo (auditoría de todas las rutas y páginas).
+- [x] Pruebas de flujos completos (parto→cría, venta→movimiento, entrada→stock).
+- [x] Pruebas de permisos por rol (14 verificaciones UI + API).
+- [x] Revisión visual responsive y consistencia de estilos (clase `.table-responsive`, shell compartido, badges).
 
 ---
 

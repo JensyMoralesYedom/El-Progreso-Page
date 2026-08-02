@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salud - Finca Ganadera El Progreso</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/gestion.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="shell-body" data-page="salud">
+
+  <div class="shell-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="shell-main">
+      <header class="shell-header" id="shellHeader"></header>
+
+      <main class="shell-content">
+        <h2 class="page-title">Salud Animal</h2>
+        <p class="page-subtitle">Vacunaciones, tratamientos y visitas del veterinario</p>
+
+        <div class="readonly-banner" id="readonlyBanner" style="display:none;">
+          <i class="fas fa-eye"></i> <span>Modo solo lectura. Para realizar cambios, inicie sesión con un rol autorizado.</span>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="vacunaciones"><i class="fas fa-syringe"></i> Vacunaciones</button>
+          <button class="tab" data-tab="tratamientos"><i class="fas fa-notes-medical"></i> Tratamientos</button>
+          <button class="tab" data-tab="visitas"><i class="fas fa-stethoscope"></i> Visitas</button>
+          <button class="tab" data-tab="historial"><i class="fas fa-history"></i> Historial</button>
+        </div>
+
+        <!-- ========== PESTAÑA VACUNACIONES ========== -->
+        <div class="tab-panel active" id="panel-vacunaciones">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-syringe"></i> Vacunaciones</h3>
+              <button class="btn-new" id="btnNewVacuna" style="display:none;">
+                <i class="fas fa-plus"></i> Nueva Vacunación
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Animal</th>
+                  <th>Vacuna</th>
+                  <th>Dosis</th>
+                  <th>Aplicación</th>
+                  <th>Próxima</th>
+                  <th>Veterinario</th>
+                  <th>Observaciones</th>
+                  <th id="colAccionesVac" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="vacunaBody">
+                <tr><td colspan="9" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando vacunaciones...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA TRATAMIENTOS ========== -->
+        <div class="tab-panel" id="panel-tratamientos">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-notes-medical"></i> Tratamientos</h3>
+              <button class="btn-new" id="btnNewTratamiento" style="display:none;">
+                <i class="fas fa-plus"></i> Nuevo Tratamiento
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Animal</th>
+                  <th>Tipo</th>
+                  <th>Diagnóstico</th>
+                  <th>Medicamento</th>
+                  <th>Inicio</th>
+                  <th>Fin</th>
+                  <th>Estado</th>
+                  <th>Costo</th>
+                  <th id="colAccionesTra" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tratamientoBody">
+                <tr><td colspan="10" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando tratamientos...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA VISITAS ========== -->
+        <div class="tab-panel" id="panel-visitas">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-stethoscope"></i> Visitas del veterinario</h3>
+              <button class="btn-new" id="btnNewVisita" style="display:none;">
+                <i class="fas fa-plus"></i> Nueva Visita
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Motivo</th>
+                  <th>Diagnóstico</th>
+                  <th>Costo</th>
+                  <th>Veterinario</th>
+                  <th id="colAccionesVis" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="visitaBody">
+                <tr><td colspan="7" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando visitas...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA HISTORIAL ========== -->
+        <div class="tab-panel" id="panel-historial">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-history"></i> Historial sanitario</h3>
+              <select id="histAnimal" style="padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;background:var(--cream);min-width:220px;">
+                <option value="">Seleccione un animal</option>
+              </select>
+            </div>
+            <div id="histContenido">
+              <p class="no-data" style="justify-content:flex-start;padding:1rem 0;">
+                <i class="fas fa-info-circle"></i><p style="margin-left:0.5rem;">Seleccione un animal para ver su historial completo.</p>
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== MODAL VACUNA ========== -->
+  <div class="modal-overlay" id="vacunaModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="vacunaTitle">Nueva Vacunación</h3>
+        <button class="modal-close" id="vacunaClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="vacunaForm">
+          <input type="hidden" id="vacunaId">
+          <div class="form-group">
+            <label for="vacAnimal">Animal *</label>
+            <select id="vacAnimal" required>
+              <option value="">Seleccione un animal</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="vacVacuna">Vacuna *</label>
+              <input type="text" id="vacVacuna" maxlength="100" placeholder="Ej: Fiebre aftosa" required>
+            </div>
+            <div class="form-group">
+              <label for="vacDosis">Dosis</label>
+              <input type="text" id="vacDosis" maxlength="50" placeholder="Ej: 5 ml">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="vacFechaAplicacion">Fecha de aplicación</label>
+              <input type="date" id="vacFechaAplicacion">
+            </div>
+            <div class="form-group">
+              <label for="vacFechaProxima">Próxima dosis</label>
+              <input type="date" id="vacFechaProxima">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="vacVeterinario">Veterinario</label>
+            <input type="text" id="vacVeterinario" maxlength="100" placeholder="Nombre del veterinario">
+          </div>
+          <div class="form-group">
+            <label for="vacObservaciones">Observaciones</label>
+            <textarea id="vacObservaciones" maxlength="300" rows="2" placeholder="Comentarios"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="vacunaCancel">Cancelar</button>
+        <button class="btn-save" id="vacunaSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL TRATAMIENTO ========== -->
+  <div class="modal-overlay" id="tratamientoModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="tratamientoTitle">Nuevo Tratamiento</h3>
+        <button class="modal-close" id="tratamientoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="tratamientoForm">
+          <input type="hidden" id="tratamientoId">
+          <div class="form-group">
+            <label for="traAnimal">Animal *</label>
+            <select id="traAnimal" required>
+              <option value="">Seleccione un animal</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="traTipo">Tipo</label>
+              <select id="traTipo">
+                <option value="Enfermedad">Enfermedad</option>
+                <option value="Lesión">Lesión</option>
+                <option value="Desparasitación">Desparasitación</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="traEstado">Estado</label>
+              <select id="traEstado">
+                <option value="Activo">Activo</option>
+                <option value="Finalizado">Finalizado</option>
+                <option value="Cancelado">Cancelado</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="traDiagnostico">Diagnóstico</label>
+            <input type="text" id="traDiagnostico" maxlength="200" placeholder="Diagnóstico">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="traMedicamento">Medicamento</label>
+              <input type="text" id="traMedicamento" maxlength="100" placeholder="Medicamento aplicado">
+            </div>
+            <div class="form-group">
+              <label for="traDosis">Dosis</label>
+              <input type="text" id="traDosis" maxlength="50" placeholder="Ej: 10 ml">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="traFechaInicio">Fecha de inicio</label>
+              <input type="date" id="traFechaInicio">
+            </div>
+            <div class="form-group">
+              <label for="traFechaFin">Fecha de fin</label>
+              <input type="date" id="traFechaFin">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="traCosto">Costo</label>
+              <input type="number" id="traCosto" step="0.01" min="0" placeholder="Ej: 2500">
+            </div>
+            <div class="form-group">
+              <label for="traVeterinario">Veterinario</label>
+              <input type="text" id="traVeterinario" maxlength="100" placeholder="Nombre del veterinario">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="traObservaciones">Observaciones</label>
+            <textarea id="traObservaciones" maxlength="300" rows="2" placeholder="Comentarios"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="tratamientoCancel">Cancelar</button>
+        <button class="btn-save" id="tratamientoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL VISITA ========== -->
+  <div class="modal-overlay" id="visitaModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="visitaTitle">Nueva Visita</h3>
+        <button class="modal-close" id="visitaClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="visitaForm">
+          <input type="hidden" id="visitaId">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="visFecha">Fecha</label>
+              <input type="date" id="visFecha">
+            </div>
+            <div class="form-group">
+              <label for="visCosto">Costo</label>
+              <input type="number" id="visCosto" step="0.01" min="0" placeholder="Ej: 5000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="visMotivo">Motivo</label>
+            <input type="text" id="visMotivo" maxlength="200" placeholder="Motivo de la visita">
+          </div>
+          <div class="form-group">
+            <label for="visDiagnostico">Diagnóstico</label>
+            <textarea id="visDiagnostico" maxlength="300" rows="2" placeholder="Diagnóstico"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="visVeterinario">Veterinario</label>
+            <input type="text" id="visVeterinario" maxlength="100" placeholder="Nombre del veterinario">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="visitaCancel">Cancelar</button>
+        <button class="btn-save" id="visitaSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL CONFIRMAR ELIMINACIÓN ========== -->
+  <div class="modal-overlay confirm-modal" id="confirmModal">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="confirm-text">¿Está seguro de eliminar este registro?</div>
+        <div class="confirm-subtext" id="confirmSubtext">Esta acción no se puede deshacer.</div>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-cancel" id="btnConfirmCancel">Cancelar</button>
+        <button class="btn-confirm-delete" id="btnConfirmDelete">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/salud.js"></script>
+</body>
+</html>

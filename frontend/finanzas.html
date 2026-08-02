@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finanzas - Finca Ganadera El Progreso</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/gestion.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="shell-body" data-page="finanzas">
+
+  <div class="shell-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="shell-main">
+      <header class="shell-header" id="shellHeader"></header>
+
+      <main class="shell-content">
+        <h2 class="page-title">Finanzas</h2>
+        <p class="page-subtitle">Movimientos financieros, pagos a empleados y saldo</p>
+
+        <div class="readonly-banner" id="readonlyBanner" style="display:none;">
+          <i class="fas fa-eye"></i> <span>Modo solo lectura. Para realizar cambios, inicie sesión con un rol autorizado.</span>
+        </div>
+
+        <div class="no-access-banner" id="noAccessBanner" style="display:none;">
+          <i class="fas fa-lock"></i> <span>Su rol no tiene acceso al módulo de finanzas.</span>
+        </div>
+
+        <div id="finanzasContent" style="display:none;">
+          <div class="tabs">
+            <button class="tab active" data-tab="movimientos"><i class="fas fa-exchange-alt"></i> Movimientos</button>
+            <button class="tab" data-tab="pagos"><i class="fas fa-money-check-alt"></i> Pagos</button>
+            <button class="tab" data-tab="saldo"><i class="fas fa-chart-line"></i> Saldo</button>
+          </div>
+
+          <!-- ========== PESTAÑA MOVIMIENTOS ========== -->
+          <div class="tab-panel active" id="panel-movimientos">
+            <div class="data-table-container">
+              <div class="table-header">
+                <h3><i class="fas fa-exchange-alt"></i> Movimientos financieros</h3>
+                <button class="btn-new" id="btnNewMovimiento" style="display:none;">
+                  <i class="fas fa-plus"></i> Nuevo Movimiento
+                </button>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Categoría</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Método</th>
+                    <th>Responsable</th>
+                    <th id="colAcciones" style="display:none;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="finBody">
+                  <tr><td colspan="9" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando movimientos...</p></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ========== PESTAÑA PAGOS ========== -->
+          <div class="tab-panel" id="panel-pagos">
+            <div class="data-table-container">
+              <div class="table-header">
+                <h3><i class="fas fa-money-check-alt"></i> Pagos a empleados</h3>
+                <button class="btn-new" id="btnNewPago" style="display:none;">
+                  <i class="fas fa-plus"></i> Nuevo Pago
+                </button>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Empleado</th>
+                    <th>Período</th>
+                    <th>Salario Bruto</th>
+                    <th>Deducciones</th>
+                    <th>Neto</th>
+                    <th>Fecha</th>
+                    <th>Método</th>
+                    <th id="colAccionesPago" style="display:none;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="pagoBody">
+                  <tr><td colspan="9" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando pagos...</p></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ========== PESTAÑA SALDO ========== -->
+          <div class="tab-panel" id="panel-saldo">
+            <div class="kpi-grid saldo-grid">
+              <div class="kpi-card kpi-forest">
+                <div class="kpi-icon"><i class="fas fa-arrow-down"></i></div>
+                <div class="kpi-value" id="saldoIngresos">0</div>
+                <div class="kpi-label">Ingresos</div>
+              </div>
+              <div class="kpi-card kpi-red">
+                <div class="kpi-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="kpi-value" id="saldoEgresos">0</div>
+                <div class="kpi-label">Egresos</div>
+              </div>
+              <div class="kpi-card kpi-wheat">
+                <div class="kpi-icon"><i class="fas fa-scale-balanced"></i></div>
+                <div class="kpi-value" id="saldoTotal">0</div>
+                <div class="kpi-label">Saldo</div>
+              </div>
+            </div>
+            <div class="data-table-container" style="margin-top:1.5rem;">
+              <div class="table-header">
+                <h3><i class="fas fa-chart-pie"></i> Resumen por categoría</h3>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Categoría</th>
+                    <th>Tipo</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="saldoBody">
+                  <tr><td colspan="3" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando resumen...</p></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== MODAL MOVIMIENTO ========== -->
+  <div class="modal-overlay" id="movimientoModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="movimientoTitle">Nuevo Movimiento</h3>
+        <button class="modal-close" id="movimientoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="movimientoForm">
+          <input type="hidden" id="movimientoId">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="finTipo">Tipo *</label>
+              <select id="finTipo" required>
+                <option value="">Seleccione</option>
+                <option value="Ingreso">Ingreso</option>
+                <option value="Egreso">Egreso</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="finFecha">Fecha</label>
+              <input type="date" id="finFecha">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="finCategoria">Categoría *</label>
+              <input type="text" id="finCategoria" maxlength="100" placeholder="Ej: Venta de leche" required>
+            </div>
+            <div class="form-group">
+              <label for="finMonto">Monto *</label>
+              <input type="number" id="finMonto" step="0.01" min="0" placeholder="Ej: 250000" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="finDescripcion">Descripción</label>
+            <input type="text" id="finDescripcion" maxlength="200" placeholder="Detalle del movimiento">
+          </div>
+          <div class="form-group">
+            <label for="finMetodo">Método de pago</label>
+            <select id="finMetodo">
+              <option value="">Seleccione</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Transferencia">Transferencia</option>
+              <option value="Cheque">Cheque</option>
+              <option value="Tarjeta">Tarjeta</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="movimientoCancel">Cancelar</button>
+        <button class="btn-save" id="movimientoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL PAGO ========== -->
+  <div class="modal-overlay" id="pagoModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="pagoTitle">Nuevo Pago</h3>
+        <button class="modal-close" id="pagoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="pagoForm">
+          <input type="hidden" id="pagoId">
+          <div class="form-group">
+            <label for="pagoEmpleado">Empleado *</label>
+            <select id="pagoEmpleado" required>
+              <option value="">Seleccione un empleado</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pagoPeriodo">Período *</label>
+              <input type="text" id="pagoPeriodo" maxlength="20" placeholder="Ej: 2026-07" required>
+            </div>
+            <div class="form-group">
+              <label for="pagoFecha">Fecha de pago</label>
+              <input type="date" id="pagoFecha">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pagoBruto">Salario bruto *</label>
+              <input type="number" id="pagoBruto" step="0.01" min="0" placeholder="Ej: 30000" required>
+            </div>
+            <div class="form-group">
+              <label for="pagoDeducciones">Deducciones</label>
+              <input type="number" id="pagoDeducciones" step="0.01" min="0" placeholder="Ej: 5000">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pagoNeto">Salario neto *</label>
+              <input type="number" id="pagoNeto" step="0.01" min="0" placeholder="Ej: 25000" required>
+            </div>
+            <div class="form-group">
+              <label for="pagoMetodo">Método de pago</label>
+              <select id="pagoMetodo">
+                <option value="">Seleccione</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Transferencia">Transferencia</option>
+                <option value="Cheque">Cheque</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pagoObs">Observaciones</label>
+            <input type="text" id="pagoObs" maxlength="200" placeholder="Comentarios">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="pagoCancel">Cancelar</button>
+        <button class="btn-save" id="pagoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL CONFIRMAR ELIMINACIÓN ========== -->
+  <div class="modal-overlay confirm-modal" id="confirmModal">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="confirm-text">¿Está seguro de eliminar este registro?</div>
+        <div class="confirm-subtext" id="confirmSubtext">Esta acción no se puede deshacer.</div>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-cancel" id="btnConfirmCancel">Cancelar</button>
+        <button class="btn-confirm-delete" id="btnConfirmDelete">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/finanzas.js"></script>
+</body>
+</html>

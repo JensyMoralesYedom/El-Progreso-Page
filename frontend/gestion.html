@@ -11,62 +11,126 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/gestion.css">
+  <link rel="stylesheet" href="css/dashboard.css">
 </head>
-<body>
+<body class="shell-body" data-page="gestion">
 
-  <!-- Header -->
-  <header class="page-header" id="pageHeader">
-    <div class="header-left">
-      <a href="index.html"><img src="img/Logo.png" alt="Logo El Progreso"></a>
-      <h1>Gestión de Ganado</h1>
-    </div>
-    <div class="header-right">
-      <span class="user-info"><i class="fas fa-user"></i> <strong id="userName">-</strong></span>
-      <span class="role-badge" id="userRole">-</span>
-      <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-    </div>
-  </header>
+  <div class="shell-layout">
+    <div id="sidebarContainer"></div>
 
-  <!-- Contenido -->
-  <div class="page-content">
-    <h2 class="page-title">Registro de Ganado</h2>
-    <p class="page-subtitle">Administre los registros de ganado de la finca</p>
+    <div class="shell-main">
+      <header class="shell-header" id="shellHeader"></header>
 
-    <div class="readonly-banner" id="readonlyBanner" style="display:none;">
-      <i class="fas fa-eye"></i> <span>Modo solo lectura. Para realizar cambios, inicie sesión como administrador.</span>
-    </div>
+      <main class="shell-content">
+        <h2 class="page-title">Inventario de Ganado</h2>
+        <p class="page-subtitle">Administre el ciclo de vida del ganado, movimientos y traslados</p>
 
-    <div class="data-table-container">
-      <div class="table-header">
-        <h3><i class="fas fa-cow"></i> Registros</h3>
-        <button class="btn-new" id="btnNew" style="display:none;">
-          <i class="fas fa-plus"></i> Nuevo Registro
-        </button>
-      </div>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Arete</th>
-            <th>Nombre</th>
-            <th>Raza</th>
-            <th>Sexo</th>
-            <th>Peso (kg)</th>
-            <th>Estado</th>
-            <th>Ubicación</th>
-            <th id="colAcciones" style="display:none;">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr><td colspan="9" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando registros...</p></td></tr>
-        </tbody>
-      </table>
+        <div class="readonly-banner" id="readonlyBanner" style="display:none;">
+          <i class="fas fa-eye"></i> <span>Modo solo lectura. Para realizar cambios, inicie sesión con un rol autorizado.</span>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="inventario"><i class="fas fa-cow"></i> Inventario</button>
+          <button class="tab" data-tab="movimientos"><i class="fas fa-exchange-alt"></i> Movimientos</button>
+          <button class="tab" data-tab="traslados"><i class="fas fa-route"></i> Traslados</button>
+        </div>
+
+        <!-- ========== PESTAÑA INVENTARIO ========== -->
+        <div class="tab-panel active" id="panel-inventario">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-cow"></i> Registros</h3>
+              <button class="btn-new" id="btnNewGanado" style="display:none;">
+                <i class="fas fa-plus"></i> Nuevo Registro
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Arete</th>
+                  <th>Nombre</th>
+                  <th>Raza</th>
+                  <th>Sexo</th>
+                  <th>Peso (kg)</th>
+                  <th>Estado San.</th>
+                  <th>Estado</th>
+                  <th>Potrero</th>
+                  <th id="colAcciones" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr><td colspan="10" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando registros...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA MOVIMIENTOS ========== -->
+        <div class="tab-panel" id="panel-movimientos">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-exchange-alt"></i> Entradas y salidas</h3>
+              <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+                <select id="filtroMovAnimal" style="padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;background:var(--cream);">
+                  <option value="">Todos los animales</option>
+                </select>
+                <button class="btn-new" id="btnNewMovimiento" style="display:none;">
+                  <i class="fas fa-plus"></i> Nuevo Movimiento
+                </button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Animal</th>
+                  <th>Tipo</th>
+                  <th>Descripción</th>
+                  <th>Monto</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody id="movBody">
+                <tr><td colspan="6" class="no-data"><i class="fas fa-inbox"></i><p>Sin movimientos registrados</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA TRASLADOS ========== -->
+        <div class="tab-panel" id="panel-traslados">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-route"></i> Traslados entre potreros</h3>
+              <button class="btn-new" id="btnNewTraslado" style="display:none;">
+                <i class="fas fa-plus"></i> Nuevo Traslado
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Animal</th>
+                  <th>Origen</th>
+                  <th>Destino</th>
+                  <th>Motivo</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody id="trasladoBody">
+                <tr><td colspan="6" class="no-data"><i class="fas fa-inbox"></i><p>Sin traslados registrados</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
     </div>
   </div>
 
-  <!-- Modal Formulario -->
+  <!-- ========== MODAL GANADO ========== -->
   <div class="modal-overlay" id="formModal">
-    <div class="modal">
+    <div class="modal modal-lg">
       <div class="modal-header">
         <h3 id="modalTitle">Nuevo Registro</h3>
         <button class="modal-close" id="modalClose">&times;</button>
@@ -121,8 +185,51 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="ubicacion">Ubicación</label>
-              <input type="text" id="ubicacion" maxlength="100" placeholder="Ej: Potrero Norte">
+              <label for="estado">Estado *</label>
+              <select id="estado">
+                <option value="Activo">Activo</option>
+                <option value="Vendido">Vendido</option>
+                <option value="Muerto">Muerto</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="origen">Origen</label>
+              <select id="origen">
+                <option value="Nacido">Nacido</option>
+                <option value="Comprado">Comprado</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="potrero">Potrero</label>
+              <select id="potrero">
+                <option value="">Sin potrero</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fechaCompra">Fecha de Compra</label>
+              <input type="date" id="fechaCompra">
+            </div>
+            <div class="form-group">
+              <label for="precioCompra">Precio de Compra</label>
+              <input type="number" id="precioCompra" step="0.01" min="0" placeholder="Ej: 1500000">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="madre">Madre</label>
+              <select id="madre">
+                <option value="">Sin madre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="padre">Padre</label>
+              <select id="padre">
+                <option value="">Sin padre</option>
+              </select>
             </div>
           </div>
         </form>
@@ -134,7 +241,98 @@
     </div>
   </div>
 
-  <!-- Modal Confirmar Eliminación -->
+  <!-- ========== MODAL MOVIMIENTO ========== -->
+  <div class="modal-overlay" id="movimientoModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Nuevo Movimiento</h3>
+        <button class="modal-close" id="movimientoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="movimientoForm">
+          <div class="form-group">
+            <label for="movAnimal">Animal *</label>
+            <select id="movAnimal" required>
+              <option value="">Seleccione un animal</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="movTipo">Tipo *</label>
+              <select id="movTipo" required>
+                <option value="">Seleccione</option>
+                <option value="Nacimiento">Nacimiento</option>
+                <option value="Compra">Compra</option>
+                <option value="Venta">Venta</option>
+                <option value="Muerte">Muerte</option>
+                <option value="Descarte">Descarte</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="movFecha">Fecha</label>
+              <input type="date" id="movFecha">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="movMonto">Monto</label>
+              <input type="number" id="movMonto" step="0.01" min="0" placeholder="Ej: 2000000">
+            </div>
+            <div class="form-group">
+              <label for="movDescripcion">Descripción</label>
+              <input type="text" id="movDescripcion" maxlength="200" placeholder="Motivo del movimiento">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="movimientoCancel">Cancelar</button>
+        <button class="btn-save" id="movimientoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL TRASLADO ========== -->
+  <div class="modal-overlay" id="trasladoModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Nuevo Traslado</h3>
+        <button class="modal-close" id="trasladoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="trasladoForm">
+          <div class="form-group">
+            <label for="trAnimal">Animal *</label>
+            <select id="trAnimal" required>
+              <option value="">Seleccione un animal</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trDestino">Potrero destino *</label>
+              <select id="trDestino" required>
+                <option value="">Seleccione un potrero</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="trFecha">Fecha</label>
+              <input type="date" id="trFecha">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="trMotivo">Motivo</label>
+            <input type="text" id="trMotivo" maxlength="200" placeholder="Ej: Rotación de pastoreo">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="trasladoCancel">Cancelar</button>
+        <button class="btn-save" id="trasladoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL CONFIRMAR ELIMINACIÓN ========== -->
   <div class="modal-overlay confirm-modal" id="confirmModal">
     <div class="modal">
       <div class="modal-body">
@@ -149,26 +347,8 @@
     </div>
   </div>
 
-  <!-- Notificaciones -->
-  <script>
-    function showNotification(message, type) {
-      const notification = document.createElement('div');
-      notification.style.cssText = 'position:fixed;top:20px;right:20px;padding:16px 24px;border-radius:12px;color:#fff;font-family:"DM Sans",sans-serif;font-size:0.95rem;z-index:3000;display:flex;align-items:center;gap:12px;max-width:400px;box-shadow:0 8px 30px rgba(0,0,0,0.2);animation:slideInRight 0.4s ease;backdrop-filter:blur(10px);';
-      const colors = { success: '#2D6A4F', error: '#C62828', info: '#1565C0' };
-      const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
-      notification.style.background = colors[type] || colors.info;
-      notification.innerHTML = '<i class="fas ' + (icons[type] || icons.info) + '"></i><span>' + message + '</span>';
-      document.body.appendChild(notification);
-      const style = document.createElement('style');
-      style.textContent = '@keyframes slideInRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes slideOutRight{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}';
-      document.head.appendChild(style);
-      setTimeout(function () {
-        notification.style.animation = 'slideOutRight 0.4s ease forwards';
-        setTimeout(function () { notification.remove(); }, 400);
-      }, 4000);
-    }
-  </script>
   <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
   <script src="js/gestion.js"></script>
 </body>
 </html>

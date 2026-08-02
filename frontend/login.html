@@ -56,7 +56,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const urlParams = new URLSearchParams(window.location.search);
-      const redirect = urlParams.get('redirect') || 'gestion.html';
+      const redirect = urlParams.get('redirect') || 'dashboard.html';
 
       if (Auth.isLoggedIn()) {
         window.location.href = redirect;

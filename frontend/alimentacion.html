@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alimentación - Finca Ganadera El Progreso</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/gestion.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="shell-body" data-page="alimentacion">
+
+  <div class="shell-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="shell-main">
+      <header class="shell-header" id="shellHeader"></header>
+
+      <main class="shell-content">
+        <h2 class="page-title">Alimentación</h2>
+        <p class="page-subtitle">Registro de raciones por potrero o por animal</p>
+
+        <div class="no-access-banner" id="noAccessBanner" style="display:none;">
+          <i class="fas fa-lock"></i> <span>Su rol no tiene acceso al módulo de alimentación.</span>
+        </div>
+
+        <div id="alimentacionContent" style="display:none;">
+          <div class="kpi-grid">
+            <div class="kpi-card kpi-forest">
+              <div class="kpi-icon"><i class="fas fa-weight-hanging"></i></div>
+              <div class="kpi-value" id="kpiTotalKg">0 kg</div>
+              <div class="kpi-label">Total kg</div>
+            </div>
+            <div class="kpi-card kpi-wheat">
+              <div class="kpi-icon"><i class="fas fa-dollar-sign"></i></div>
+              <div class="kpi-value" id="kpiTotalCosto">0</div>
+              <div class="kpi-label">Costo total</div>
+            </div>
+            <div class="kpi-card kpi-blue">
+              <div class="kpi-icon"><i class="fas fa-list"></i></div>
+              <div class="kpi-value" id="kpiRaciones">0</div>
+              <div class="kpi-label">Raciones</div>
+            </div>
+          </div>
+
+          <div class="data-table-container" style="margin-top:1.5rem;">
+            <div class="table-header">
+              <h3><i class="fas fa-seedling"></i> Raciones registradas</h3>
+              <button class="btn-new" id="btnNewAlimentacion">
+                <i class="fas fa-plus"></i> Nueva Ración
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Alimento</th>
+                  <th>Cantidad (kg)</th>
+                  <th>Costo</th>
+                  <th>Destino</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody id="alimentacionBody">
+                <tr><td colspan="8" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando raciones...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== MODAL ALIMENTACIÓN ========== -->
+  <div class="modal-overlay" id="alimentacionModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3>Nueva Ración</h3>
+        <button class="modal-close" id="alimentacionClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="alimentacionForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="aliFecha">Fecha</label>
+              <input type="date" id="aliFecha">
+            </div>
+            <div class="form-group">
+              <label for="aliTipo">Tipo</label>
+              <select id="aliTipo">
+                <option value="Forraje">Forraje</option>
+                <option value="Suplemento">Suplemento</option>
+                <option value="Concentrado">Concentrado</option>
+                <option value="Minerales">Minerales</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="aliAlimento">Alimento *</label>
+            <input type="text" id="aliAlimento" maxlength="100" placeholder="Ej: Pasto elefante" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="aliCantidad">Cantidad (kg) *</label>
+              <input type="number" id="aliCantidad" step="0.01" min="0" placeholder="Ej: 120" required>
+            </div>
+            <div class="form-group">
+              <label for="aliCosto">Costo</label>
+              <input type="number" id="aliCosto" step="0.01" min="0" placeholder="Ej: 5000">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="aliPotrero">Potrero</label>
+              <select id="aliPotrero">
+                <option value="">Seleccione un potrero</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="aliAnimal">Animal</label>
+              <select id="aliAnimal">
+                <option value="">Seleccione un animal</option>
+              </select>
+            </div>
+          </div>
+          <p class="form-hint"><i class="fas fa-info-circle"></i> Indique un potrero o un animal como destino de la ración.</p>
+          <div class="form-group">
+            <label for="aliObs">Observaciones</label>
+            <textarea id="aliObs" maxlength="300" rows="2" placeholder="Comentarios"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="alimentacionCancel">Cancelar</button>
+        <button class="btn-save" id="alimentacionSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/alimentacion.js"></script>
+</body>
+</html>

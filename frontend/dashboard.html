@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Finca Ganadera El Progreso</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/gestion.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="shell-body" data-page="dashboard">
+
+  <div class="shell-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="shell-main">
+      <header class="shell-header" id="shellHeader"></header>
+
+      <main class="shell-content" id="shellContent">
+        <div class="page-title-wrap">
+          <h2 class="page-title">Panel de Indicadores</h2>
+          <p class="page-subtitle">Resumen general de la finca</p>
+        </div>
+
+        <div class="kpi-grid" id="kpiGrid">
+          <div class="kpi-card"><div class="kpi-icon"><i class="fas fa-spinner fa-spin"></i></div><div class="kpi-info"><span class="kpi-label">Cargando indicadores...</span></div></div>
+        </div>
+
+        <div class="panel-grid">
+          <div class="panel-card">
+            <div class="panel-header">
+              <h3><i class="fas fa-baby"></i> Próximos partos</h3>
+            </div>
+            <div id="panelPartos"></div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-header">
+              <h3><i class="fas fa-exclamation-triangle"></i> Alertas de stock</h3>
+            </div>
+            <div id="panelStock"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

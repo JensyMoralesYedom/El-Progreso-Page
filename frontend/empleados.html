@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empleados - Finca Ganadera El Progreso</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/gestion.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="shell-body" data-page="empleados">
+
+  <div class="shell-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="shell-main">
+      <header class="shell-header" id="shellHeader"></header>
+
+      <main class="shell-content">
+        <h2 class="page-title">Empleados y Tareas</h2>
+        <p class="page-subtitle">Administre el personal de la finca y las tareas asignadas</p>
+
+        <div class="readonly-banner" id="readonlyBanner" style="display:none;">
+          <i class="fas fa-eye"></i> <span>Modo solo lectura. Para realizar cambios, inicie sesión con un rol autorizado.</span>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="empleados"><i class="fas fa-users"></i> Empleados</button>
+          <button class="tab" data-tab="tareas"><i class="fas fa-tasks"></i> Tareas</button>
+        </div>
+
+        <!-- ========== PESTAÑA EMPLEADOS ========== -->
+        <div class="tab-panel active" id="panel-empleados">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-users"></i> Personal</h3>
+              <button class="btn-new" id="btnNewEmpleado" style="display:none;">
+                <i class="fas fa-plus"></i> Nuevo Empleado
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Cargo</th>
+                  <th>Teléfono</th>
+                  <th>Email</th>
+                  <th>Ingreso</th>
+                  <th>Salario Base</th>
+                  <th>Estado</th>
+                  <th id="colAcciones" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="empleadoBody">
+                <tr><td colspan="9" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando empleados...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA TAREAS ========== -->
+        <div class="tab-panel" id="panel-tareas">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-tasks"></i> Tareas asignadas</h3>
+              <button class="btn-new" id="btnNewTarea" style="display:none;">
+                <i class="fas fa-plus"></i> Nueva Tarea
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Asignado a</th>
+                  <th>Vence</th>
+                  <th>Prioridad</th>
+                  <th>Estado</th>
+                  <th id="colAccionesTarea" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tareaBody">
+                <tr><td colspan="7" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando tareas...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== MODAL EMPLEADO ========== -->
+  <div class="modal-overlay" id="empleadoModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="empleadoTitle">Nuevo Empleado</h3>
+        <button class="modal-close" id="empleadoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="empleadoForm">
+          <input type="hidden" id="empleadoId">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="empNombre">Nombre completo *</label>
+              <input type="text" id="empNombre" maxlength="100" placeholder="Nombre del empleado" required>
+            </div>
+            <div class="form-group">
+              <label for="empCargo">Cargo</label>
+              <input type="text" id="empCargo" maxlength="100" placeholder="Ej: Ordeñador">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="empTelefono">Teléfono</label>
+              <input type="text" id="empTelefono" maxlength="20" placeholder="Ej: 809-000-0000">
+            </div>
+            <div class="form-group">
+              <label for="empEmail">Email</label>
+              <input type="email" id="empEmail" maxlength="100" placeholder="correo@ejemplo.com">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="empFechaIngreso">Fecha de ingreso</label>
+              <input type="date" id="empFechaIngreso">
+            </div>
+            <div class="form-group">
+              <label for="empSalario">Salario base</label>
+              <input type="number" id="empSalario" step="0.01" min="0" placeholder="Ej: 25000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="empEstado">Estado</label>
+            <select id="empEstado">
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="empleadoCancel">Cancelar</button>
+        <button class="btn-save" id="empleadoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL TAREA ========== -->
+  <div class="modal-overlay" id="tareaModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="tareaTitle">Nueva Tarea</h3>
+        <button class="modal-close" id="tareaClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="tareaForm">
+          <input type="hidden" id="tareaId">
+          <div class="form-group">
+            <label for="tarTitulo">Título *</label>
+            <input type="text" id="tarTitulo" maxlength="150" placeholder="Título de la tarea" required>
+          </div>
+          <div class="form-group">
+            <label for="tarDescripcion">Descripción</label>
+            <textarea id="tarDescripcion" maxlength="300" rows="2" placeholder="Detalle de la tarea"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tarEmpleado" id="tarEmpleadoLabel">Asignado a</label>
+              <select id="tarEmpleado">
+                <option value="">Sin asignar</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tarPrioridad">Prioridad</label>
+              <select id="tarPrioridad">
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+                <option value="Alta">Alta</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tarAsignacion">Fecha de asignación</label>
+              <input type="date" id="tarAsignacion">
+            </div>
+            <div class="form-group">
+              <label for="tarVencimiento">Fecha de vencimiento</label>
+              <input type="date" id="tarVencimiento">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tarEstado">Estado</label>
+            <select id="tarEstado">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En progreso">En progreso</option>
+              <option value="Completada">Completada</option>
+              <option value="Cancelada">Cancelada</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="tareaCancel">Cancelar</button>
+        <button class="btn-save" id="tareaSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL CONFIRMAR ELIMINACIÓN ========== -->
+  <div class="modal-overlay confirm-modal" id="confirmModal">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="confirm-text">¿Está seguro de eliminar este registro?</div>
+        <div class="confirm-subtext" id="confirmSubtext">Esta acción no se puede deshacer.</div>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-cancel" id="btnConfirmCancel">Cancelar</button>
+        <button class="btn-confirm-delete" id="btnConfirmDelete">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/empleados.js"></script>
+</body>
+</html>

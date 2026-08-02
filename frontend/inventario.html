@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario - Finca Ganadera El Progreso</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/gestion.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="shell-body" data-page="inventario">
+
+  <div class="shell-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="shell-main">
+      <header class="shell-header" id="shellHeader"></header>
+
+      <main class="shell-content">
+        <h2 class="page-title">Inventario de Insumos</h2>
+        <p class="page-subtitle">Administre productos, entradas y salidas de almacén</p>
+
+        <div class="readonly-banner" id="readonlyBanner" style="display:none;">
+          <i class="fas fa-eye"></i> <span>Modo solo lectura. Para realizar cambios, inicie sesión con un rol autorizado.</span>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="productos"><i class="fas fa-boxes"></i> Productos</button>
+          <button class="tab" data-tab="movimientos"><i class="fas fa-exchange-alt"></i> Movimientos</button>
+          <button class="tab" data-tab="alertas" id="tabAlertas" style="display:none;"><i class="fas fa-exclamation-triangle"></i> Alertas de Stock</button>
+        </div>
+
+        <!-- ========== PESTAÑA PRODUCTOS ========== -->
+        <div class="tab-panel active" id="panel-productos">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-boxes"></i> Catálogo de productos</h3>
+              <button class="btn-new" id="btnNewProducto" style="display:none;">
+                <i class="fas fa-plus"></i> Nuevo Producto
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Unidad</th>
+                  <th>Stock</th>
+                  <th>Mínimo</th>
+                  <th>Precio</th>
+                  <th>Estado</th>
+                  <th id="colAcciones" style="display:none;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="productoBody">
+                <tr><td colspan="9" class="no-data"><i class="fas fa-spinner fa-spin"></i><p>Cargando productos...</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA MOVIMIENTOS ========== -->
+        <div class="tab-panel" id="panel-movimientos">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-exchange-alt"></i> Entradas y salidas</h3>
+              <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+                <select id="filtroTipo" style="padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;background:var(--cream);">
+                  <option value="">Todos los tipos</option>
+                  <option value="Entrada">Entrada</option>
+                  <option value="Salida">Salida</option>
+                </select>
+                <button class="btn-new" id="btnNewMovimiento" style="display:none;">
+                  <i class="fas fa-plus"></i> Nuevo Movimiento
+                </button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Producto</th>
+                  <th>Tipo</th>
+                  <th>Cantidad</th>
+                  <th>Costo Unit.</th>
+                  <th>Proveedor</th>
+                  <th>Motivo</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody id="movBody">
+                <tr><td colspan="8" class="no-data"><i class="fas fa-inbox"></i><p>Sin movimientos registrados</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PESTAÑA ALERTAS ========== -->
+        <div class="tab-panel" id="panel-alertas">
+          <div class="data-table-container">
+            <div class="table-header">
+              <h3><i class="fas fa-exclamation-triangle"></i> Productos bajo el stock mínimo</h3>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Stock Actual</th>
+                  <th>Mínimo</th>
+                  <th>Faltante</th>
+                </tr>
+              </thead>
+              <tbody id="alertaBody">
+                <tr><td colspan="6" class="no-data"><i class="fas fa-inbox"></i><p>Sin alertas de stock</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== MODAL PRODUCTO ========== -->
+  <div class="modal-overlay" id="productoModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="productoModalTitle">Nuevo Producto</h3>
+        <button class="modal-close" id="productoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="productoForm">
+          <input type="hidden" id="productoId">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pNombre">Nombre *</label>
+              <input type="text" id="pNombre" maxlength="150" placeholder="Ej: Sal mineral" required>
+            </div>
+            <div class="form-group">
+              <label for="pCategoria">Categoría</label>
+              <input type="text" id="pCategoria" maxlength="100" placeholder="Ej: Suplemento">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pUnidad">Unidad de medida</label>
+              <select id="pUnidad">
+                <option value="unidad">Unidad</option>
+                <option value="kg">Kilogramo (kg)</option>
+                <option value="litro">Litro</option>
+                <option value="saco">Saco</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pPrecio">Precio unitario</label>
+              <input type="number" id="pPrecio" step="0.01" min="0" placeholder="Ej: 500">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pStock">Stock actual</label>
+              <input type="number" id="pStock" step="0.01" min="0" placeholder="Ej: 10">
+            </div>
+            <div class="form-group">
+              <label for="pMinimo">Stock mínimo</label>
+              <input type="number" id="pMinimo" step="0.01" min="0" placeholder="Ej: 5">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="productoCancel">Cancelar</button>
+        <button class="btn-save" id="productoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL MOVIMIENTO ========== -->
+  <div class="modal-overlay" id="movimientoModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Nuevo Movimiento</h3>
+        <button class="modal-close" id="movimientoClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="movimientoForm">
+          <div class="form-group">
+            <label for="invProducto">Producto *</label>
+            <select id="invProducto" required>
+              <option value="">Seleccione un producto</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="invTipo">Tipo *</label>
+              <select id="invTipo" required>
+                <option value="">Seleccione</option>
+                <option value="Entrada">Entrada</option>
+                <option value="Salida">Salida</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="invCantidad">Cantidad *</label>
+              <input type="number" id="invCantidad" step="0.01" min="0" placeholder="Ej: 5" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="invFecha">Fecha</label>
+              <input type="date" id="invFecha">
+            </div>
+            <div class="form-group">
+              <label for="invCosto">Costo unitario</label>
+              <input type="number" id="invCosto" step="0.01" min="0" placeholder="Ej: 450">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="invProveedor">Proveedor</label>
+            <input type="text" id="invProveedor" maxlength="100" placeholder="Ej: Agrosilo S.R.L.">
+          </div>
+          <div class="form-group">
+            <label for="invMotivo">Motivo</label>
+            <input type="text" id="invMotivo" maxlength="200" placeholder="Ej: Reposición de inventario">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="movimientoCancel">Cancelar</button>
+        <button class="btn-save" id="movimientoSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL CONFIRMAR ELIMINACIÓN ========== -->
+  <div class="modal-overlay confirm-modal" id="confirmModal">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="confirm-text">¿Está seguro de eliminar este producto?</div>
+        <div class="confirm-subtext" id="confirmSubtext">Esta acción no se puede deshacer.</div>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-cancel" id="btnConfirmCancel">Cancelar</button>
+        <button class="btn-confirm-delete" id="btnConfirmDelete">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/inventario.js"></script>
+</body>
+</html>

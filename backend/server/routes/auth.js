@@ -5,10 +5,12 @@ const jwt = require('jsonwebtoken');
 const pool = require('../db');
 const { verificarToken } = require('../middleware/auth');
 
+const ROLES_VALIDOS = ['admin', 'trabajador', 'veterinario', 'invitado'];
+
 // POST /api/auth/registro - Registrar nuevo usuario
 router.post('/registro', async (req, res) => {
   try {
-    const { nombre, email, password } = req.body;
+    const { nombre, email, password, rol } = req.body;
 
     if (!nombre || !email || !password) {
       return res.status(400).json({ success: false, error: 'Todos los campos son obligatorios' });
@@ -31,6 +33,11 @@ router.post('/registro', async (req, res) => {
       return res.status(400).json({ success: false, error: 'La contraseña debe tener al menos 6 caracteres' });
     }
 
+    const rolFinal = rol ? rol.trim().toLowerCase() : 'admin';
+    if (!ROLES_VALIDOS.includes(rolFinal)) {
+      return res.status(400).json({ success: false, error: 'El rol no es válido' });
+    }
+
     const existingUser = await pool.query('SELECT id FROM usuarios WHERE email = $1', [email.trim().toLowerCase()]);
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ success: false, error: 'El email ya está registrado' });
@@ -41,10 +48,10 @@ router.post('/registro', async (req, res) => {
 
     await pool.query(
       'INSERT INTO usuarios (nombre, email, password, rol) VALUES ($1, $2, $3, $4)',
-      [nombre.trim(), email.trim().toLowerCase(), hashedPassword, 'admin']
+      [nombre.trim(), email.trim().toLowerCase(), hashedPassword, rolFinal]
     );
 
-    res.status(201).json({ success: true, message: 'Usuario registrado exitosamente' });
+    res.status(201).json({ success: true, message: 'Usuario registrado exitosamente', rol: rolFinal });
   } catch (err) {
     console.error('Error en registro:', err);
     res.status(500).json({ success: false, error: 'Error interno del servidor' });
