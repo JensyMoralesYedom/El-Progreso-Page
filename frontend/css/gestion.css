@@ -290,23 +290,25 @@
 
 /* --- Modo solo lectura --- */
 .readonly-banner {
-  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.9), rgba(253, 230, 138, 0.9));
   border: 1px solid var(--wheat);
   color: #92400E;
-  padding: 0.75rem 1.25rem;
-  border-radius: 8px;
+  padding: 0.85rem 1.25rem;
+  border-radius: 14px;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   font-size: 0.9rem;
+  box-shadow: var(--shadow-sm);
 }
 
 /* --- Tabla de datos --- */
 .data-table-container {
   background: var(--white);
-  border-radius: 12px;
+  border-radius: 18px;
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--cream-dark);
   overflow: hidden;
 }
 
@@ -325,11 +327,11 @@
 }
 
 .btn-new {
-  background: var(--leaf);
+  background: linear-gradient(135deg, var(--leaf-light), var(--leaf));
   color: var(--white);
   border: none;
-  padding: 0.65rem 1.25rem;
-  border-radius: 8px;
+  padding: 0.65rem 1.35rem;
+  border-radius: 30px;
   font-size: 0.9rem;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
@@ -338,12 +340,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(15, 157, 88, 0.28);
 }
 
 .btn-new:hover {
-  background: var(--forest);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(42, 125, 82, 0.3);
+  background: linear-gradient(135deg, var(--leaf), var(--forest-light));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(15, 157, 88, 0.34);
 }
 
 .data-table {
@@ -386,7 +389,7 @@
 .btn-action {
   padding: 0.4rem 0.75rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
   font-family: 'DM Sans', sans-serif;
@@ -472,7 +475,7 @@
 
 .modal {
   background: var(--white);
-  border-radius: 16px;
+  border-radius: 20px;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
@@ -480,6 +483,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   transform: translateY(20px);
   transition: transform 0.3s;
+  border: 1px solid var(--cream-dark);
 }
 
 .modal-overlay.active .modal {
@@ -585,22 +589,23 @@
 }
 
 .btn-save {
-  background: var(--leaf);
+  background: linear-gradient(135deg, var(--leaf-light), var(--leaf));
   color: var(--white);
   border: none;
-  padding: 0.65rem 1.25rem;
-  border-radius: 8px;
+  padding: 0.65rem 1.35rem;
+  border-radius: 30px;
   font-size: 0.9rem;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 14px rgba(15, 157, 88, 0.28);
 }
 
 .btn-save:hover {
-  background: var(--forest);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(42, 125, 82, 0.3);
+  background: linear-gradient(135deg, var(--leaf), var(--forest-light));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(15, 157, 88, 0.34);
 }
 
 .btn-save:disabled {
@@ -673,6 +678,28 @@
   font-size: 1.1rem;
   margin: 0;
 }
+
+/* ========================================
+   MODO OSCURO - Ajustes puntuales
+   ======================================== */
+html[data-theme="dark"] body.shell-body .badge-bueno { background: rgba(16, 185, 129, 0.16); color: #6EE7B7; }
+html[data-theme="dark"] body.shell-body .badge-regular { background: rgba(245, 158, 11, 0.16); color: #FBBF24; }
+html[data-theme="dark"] body.shell-body .badge-critico { background: rgba(220, 38, 38, 0.16); color: #FCA5A5; }
+
+html[data-theme="dark"] body.shell-body .btn-edit { background: rgba(37, 99, 235, 0.16); color: #93C5FD; }
+html[data-theme="dark"] body.shell-body .btn-edit:hover { background: rgba(37, 99, 235, 0.26); }
+html[data-theme="dark"] body.shell-body .btn-delete { background: rgba(220, 38, 38, 0.16); color: #FCA5A5; }
+html[data-theme="dark"] body.shell-body .btn-delete:hover { background: rgba(220, 38, 38, 0.26); }
+html[data-theme="dark"] body.shell-body .btn-view { background: rgba(16, 185, 129, 0.16); color: #6EE7B7; }
+html[data-theme="dark"] body.shell-body .btn-view:hover { background: rgba(16, 185, 129, 0.26); }
+
+html[data-theme="dark"] body.shell-body .readonly-banner {
+  background: rgba(200, 146, 42, 0.14);
+  border-color: rgba(200, 146, 42, 0.35);
+  color: #F0C96A;
+}
+
+html[data-theme="dark"] body.shell-body .confirm-modal .confirm-icon { color: #F87171; }
 
 /* --- Responsive --- */
 @media (max-width: 768px) {

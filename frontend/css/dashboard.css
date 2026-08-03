@@ -1,5 +1,5 @@
 /* ========================================
-   DASHBOARD Y SHELL - ESTILOS
+   DASHBOARD Y SHELL - ESTILOS "ESMERALDA MODERNO"
    ======================================== */
 
 /* --- Estructura del shell --- */
@@ -13,9 +13,9 @@ body.shell-body {
 }
 
 .sidebar {
-  width: 250px;
+  width: 260px;
   min-height: 100vh;
-  background: var(--forest);
+  background: linear-gradient(180deg, #0E4B36 0%, #0A372A 55%, #082E23 100%);
   color: var(--white);
   display: flex;
   flex-direction: column;
@@ -25,81 +25,174 @@ body.shell-body {
   z-index: 200;
   transition: margin-left 0.3s ease;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.26), transparent 70%);
+  pointer-events: none;
+}
+
+.sidebar::after {
+  content: '';
+  position: absolute;
+  bottom: -140px;
+  left: -100px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 146, 42, 0.14), transparent 70%);
+  pointer-events: none;
 }
 
 .sidebar-brand {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1.25rem 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.4rem 1.4rem 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .sidebar-brand img {
-  height: 38px;
+  height: 40px;
+  filter: brightness(0) invert(1);
 }
 
 .sidebar-brand span {
   font-family: 'Fraunces', serif;
-  font-size: 1.05rem;
-  color: var(--white);
+  font-size: 1.12rem;
+  color: #FFFFFF;
+  letter-spacing: 0.2px;
 }
 
 .sidebar-nav {
+  position: relative;
+  z-index: 1;
   flex: 1;
-  padding: 1rem 0.75rem;
+  padding: 1rem 0.9rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 7px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.sidebar-nav .nav-section {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  color: rgba(255, 255, 255, 0.38);
+  padding: 0.7rem 0.95rem 0.35rem;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .sidebar-nav a {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  padding: 0.7rem 0.9rem;
-  border-radius: 10px;
-  color: rgba(255, 255, 255, 0.75);
+  padding: 0.68rem 0.95rem;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.72);
   text-decoration: none;
   font-size: 0.92rem;
   font-weight: 500;
-  transition: background 0.3s, color 0.3s, transform 0.2s;
+  transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
 }
 
 .sidebar-nav a i {
-  width: 20px;
+  width: 22px;
   text-align: center;
   font-size: 1rem;
 }
 
 .sidebar-nav a:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--white);
+  background: rgba(255, 255, 255, 0.09);
+  color: #FFFFFF;
   transform: translateX(2px);
 }
 
 .sidebar-nav a.active {
-  background: var(--leaf);
-  color: var(--white);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #1BBE72, #0E8F56);
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(18, 190, 114, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .sidebar-footer {
+  position: relative;
+  z-index: 1;
   padding: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.btn-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
 }
 
 .sidebar-footer .btn-logout {
   width: 100%;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--white);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  font-weight: 600;
+}
+
+.sidebar-footer .btn-logout i {
+  color: #FFFFFF;
 }
 
 .sidebar-footer .btn-logout:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.24);
 }
 
 /* --- Header del shell --- */
@@ -111,16 +204,18 @@ body.shell-body {
 }
 
 .shell-header {
-  background: var(--white);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   color: var(--carbon);
-  padding: 0.9rem 2rem;
+  padding: 0.8rem 2rem;
   display: flex;
   align-items: center;
   gap: 1rem;
   position: sticky;
   top: 0;
   z-index: 150;
-  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--cream-dark);
 }
 
 .shell-header h1 {
@@ -134,12 +229,15 @@ body.shell-body {
 .shell-header .header-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.85rem;
 }
 
 .shell-header .user-info {
   font-size: 0.9rem;
   color: var(--stone);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .shell-header .user-info strong {
@@ -148,17 +246,35 @@ body.shell-body {
 
 .shell-header .role-badge {
   display: inline-block;
-  padding: 0.25rem 0.7rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: 0.28rem 0.75rem;
+  border-radius: 30px;
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 
 .shell-header .role-badge.admin { background: var(--leaf); color: var(--white); }
 .shell-header .role-badge.trabajador { background: #EFF6FF; color: #1D4ED8; }
 .shell-header .role-badge.veterinario { background: #F0FDF4; color: #15803D; }
 .shell-header .role-badge.invitado { background: var(--stone); color: var(--white); }
+
+.btn-theme-icon {
+  background: none;
+  border: none;
+  font-size: 1.05rem;
+  color: var(--stone);
+  cursor: pointer;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+.btn-theme-icon:hover {
+  background: var(--cream-dark);
+  color: var(--forest);
+  transform: rotate(15deg);
+}
 
 .sidebar-toggle {
   display: none;
@@ -178,50 +294,76 @@ body.shell-body {
 /* --- KPIs --- */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
   gap: 1.25rem;
   margin-bottom: 2rem;
 }
 
 .kpi-card {
   background: var(--white);
-  border-radius: 14px;
-  padding: 1.25rem 1.5rem;
+  border-radius: 18px;
+  padding: 1.35rem 1.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
   box-shadow: var(--shadow-md);
-  border-left: 5px solid var(--leaf);
+  border: 1px solid var(--cream-dark);
+  position: relative;
+  overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--leaf), transparent 85%);
+  opacity: 0.9;
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  right: -32px;
+  top: -32px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--leaf-bright), transparent 70%);
+  opacity: 0.14;
+  pointer-events: none;
+}
+
 .kpi-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
 }
 
-.kpi-card.kpi-forest { border-left-color: var(--forest); }
-.kpi-card.kpi-wheat { border-left-color: var(--wheat); }
-.kpi-card.kpi-red { border-left-color: #B91C1C; }
-.kpi-card.kpi-blue { border-left-color: #1D4ED8; }
+.kpi-card.kpi-forest::before { background: linear-gradient(90deg, var(--forest), transparent 85%); }
+.kpi-card.kpi-wheat::before { background: linear-gradient(90deg, var(--wheat), transparent 85%); }
+.kpi-card.kpi-red::before { background: linear-gradient(90deg, #EF4444, transparent 85%); }
+.kpi-card.kpi-blue::before { background: linear-gradient(90deg, #3B82F6, transparent 85%); }
 
 .kpi-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
-  background: var(--cream);
+  font-size: 1.35rem;
+  background: linear-gradient(135deg, rgba(15, 157, 88, 0.12), rgba(15, 157, 88, 0.04));
   color: var(--leaf);
   flex-shrink: 0;
 }
 
-.kpi-forest .kpi-icon { background: #E7F0EA; color: var(--forest); }
-.kpi-wheat .kpi-icon { background: #FBF3E0; color: var(--wheat); }
-.kpi-red .kpi-icon { background: #FEF2F2; color: #B91C1C; }
-.kpi-blue .kpi-icon { background: #EFF6FF; color: #1D4ED8; }
+.kpi-forest .kpi-icon { background: linear-gradient(135deg, rgba(11, 61, 43, 0.14), rgba(11, 61, 43, 0.04)); color: var(--forest); }
+.kpi-wheat .kpi-icon { background: linear-gradient(135deg, rgba(200, 146, 42, 0.16), rgba(200, 146, 42, 0.05)); color: #B97E17; }
+.kpi-red .kpi-icon { background: linear-gradient(135deg, rgba(220, 38, 38, 0.12), rgba(220, 38, 38, 0.04)); color: #B91C1C; }
+.kpi-blue .kpi-icon { background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0.04)); color: #1D4ED8; }
 
 .kpi-info {
   min-width: 0;
@@ -259,8 +401,9 @@ body.shell-body {
 
 .panel-card {
   background: var(--white);
-  border-radius: 14px;
+  border-radius: 18px;
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--cream-dark);
   overflow: hidden;
 }
 
@@ -372,7 +515,8 @@ body.shell-body {
   color: #B45309;
 }
 
-/* --- Banner sin acceso --- */.no-access-banner {
+/* --- Banner sin acceso --- */
+.no-access-banner {
   display: none;
   align-items: center;
   gap: 0.85rem;
@@ -390,31 +534,36 @@ body.shell-body {
   font-size: 1.2rem;
 }
 
-/* --- Tabs --- */
+/* --- Tabs (control segmentado) --- */
 .tabs {
   display: flex;
-  gap: 0.5rem;
-  border-bottom: 2px solid var(--cream-dark);
+  gap: 0.4rem;
+  padding: 0.3rem;
+  background: var(--cream-dark);
+  border-radius: 14px;
   margin-bottom: 1.5rem;
+  width: fit-content;
+  max-width: 100%;
   overflow-x: auto;
+  border-bottom: none;
 }
 
 .tab {
   background: none;
   border: none;
-  padding: 0.8rem 1.25rem;
+  padding: 0.6rem 1.15rem;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--stone);
   cursor: pointer;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
+  border-radius: 10px;
+  margin-bottom: 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   white-space: nowrap;
-  transition: color 0.3s, border-color 0.3s;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .tab:hover {
@@ -422,8 +571,9 @@ body.shell-body {
 }
 
 .tab.active {
-  color: var(--leaf);
-  border-bottom-color: var(--leaf);
+  background: var(--white);
+  color: var(--forest);
+  box-shadow: var(--shadow-sm);
 }
 
 .tab-panel {
@@ -453,6 +603,41 @@ body.shell-body {
   margin: 0.35rem 0 0.9rem;
 }
 
+/* ========================================
+   MODO OSCURO - Ajustes puntuales
+   ======================================== */
+html[data-theme="dark"] body.shell-body .sidebar {
+  background: linear-gradient(180deg, #101B15 0%, #0B120E 55%, #08100C 100%);
+}
+
+html[data-theme="dark"] body.shell-body .sidebar-nav a.active {
+  background: linear-gradient(135deg, #17C174, #0C9E58);
+  box-shadow: 0 6px 18px rgba(23, 193, 116, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+html[data-theme="dark"] body.shell-body .kpi-wheat .kpi-icon { color: var(--wheat-light); }
+html[data-theme="dark"] body.shell-body .kpi-red .kpi-icon { color: #F87171; }
+html[data-theme="dark"] body.shell-body .kpi-blue .kpi-icon { color: #60A5FA; }
+
+html[data-theme="dark"] body.shell-body .shell-header .role-badge.trabajador { background: rgba(37, 99, 235, 0.18); color: #93C5FD; }
+html[data-theme="dark"] body.shell-body .shell-header .role-badge.veterinario { background: rgba(16, 185, 129, 0.18); color: #6EE7B7; }
+html[data-theme="dark"] body.shell-body .shell-header .role-badge.invitado { background: rgba(148, 163, 184, 0.2); color: #CBD5E1; }
+
+html[data-theme="dark"] body.shell-body .badge-alert { background: rgba(220, 38, 38, 0.15); color: #FCA5A5; }
+html[data-theme="dark"] body.shell-body .badge-parto { background: rgba(37, 99, 235, 0.15); color: #93C5FD; }
+html[data-theme="dark"] body.shell-body .badge-blue { background: rgba(37, 99, 235, 0.15); color: #93C5FD; }
+html[data-theme="dark"] body.shell-body .badge-wheat { background: rgba(200, 146, 42, 0.16); color: #F0C96A; }
+
+html[data-theme="dark"] body.shell-body .no-access-banner {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #FCA5A5;
+}
+
+html[data-theme="dark"] body.shell-body .form-hint {
+  background: var(--cream-dark);
+}
+
 /* --- Responsive --- */
 @media (max-width: 900px) {
   .panel-grid {
@@ -465,7 +650,7 @@ body.shell-body {
     position: fixed;
     left: 0;
     top: 0;
-    margin-left: -250px;
+    margin-left: -260px;
   }
 
   body.sidebar-open .sidebar {

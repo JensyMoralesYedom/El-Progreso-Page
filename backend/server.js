@@ -13,6 +13,7 @@ const alimentacionRoutes = require('./server/routes/alimentacion');
 const finanzasRoutes = require('./server/routes/finanzas');
 const empleadosRoutes = require('./server/routes/empleados');
 const inventarioRoutes = require('./server/routes/inventario');
+const publicoRoutes = require('./server/routes/publico');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,6 +36,7 @@ app.use('/api/alimentacion', alimentacionRoutes);
 app.use('/api/finanzas', finanzasRoutes);
 app.use('/api/empleados', empleadosRoutes);
 app.use('/api/inventario', inventarioRoutes);
+app.use('/api/publico', publicoRoutes);
 
 // Ruta para servir index.html como fallback
 app.get(/.*/, (req, res) => {

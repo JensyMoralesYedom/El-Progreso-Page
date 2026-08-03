@@ -80,11 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }, { threshold: 0.5 });
 
-  const statsBar = document.querySelector('.stats-bar');
-  if (statsBar) {
-    counterObserver.observe(statsBar);
-  }
-
   function animateCounter(element, target, duration) {
     let start = 0;
     const increment = target / (duration / 16);
@@ -98,6 +93,31 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }, 16);
   }
+
+  async function initStats() {
+    try {
+      const response = await fetch('/api/publico/estadisticas');
+      const result = await response.json();
+      if (result.success) {
+        const d = result.data;
+        const statAnios = document.getElementById('statAnios');
+        const statGanado = document.getElementById('statGanado');
+        const statProfesionales = document.getElementById('statProfesionales');
+        if (statAnios) statAnios.setAttribute('data-target', Math.max(1, new Date().getFullYear() - d.anio_fundacion));
+        if (statGanado) statGanado.setAttribute('data-target', d.ganado_activo || 0);
+        if (statProfesionales) statProfesionales.setAttribute('data-target', d.empleados_activos || 0);
+      }
+    } catch (err) {
+      console.error('Error al cargar estadísticas:', err);
+    } finally {
+      const statsBar = document.querySelector('.stats-bar');
+      if (statsBar) {
+        counterObserver.observe(statsBar);
+      }
+    }
+  }
+
+  initStats();
 
   // --- Filtros de Galería ---
   document.querySelectorAll('.filtro-btn').forEach(function (btn) {

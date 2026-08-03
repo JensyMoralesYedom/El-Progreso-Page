@@ -2,6 +2,36 @@
    SHELL.JS - Layout compartido (sidebar + header + utilidades)
    ======================================== */
 
+const Theme = {
+  KEY: 'elprogreso-theme',
+
+  current() {
+    return document.documentElement.getAttribute('data-theme') || 'light';
+  },
+
+  syncIcons() {
+    const dark = this.current() === 'dark';
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+      const icon = btn.querySelector('i');
+      const label = btn.querySelector('[data-theme-label]');
+      if (dark) {
+        if (icon) icon.className = 'fas fa-sun';
+        if (label) label.textContent = 'Modo claro';
+      } else {
+        if (icon) icon.className = 'fas fa-moon';
+        if (label) label.textContent = 'Modo oscuro';
+      }
+    });
+  },
+
+  toggle() {
+    const next = this.current() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem(this.KEY, next); } catch (e) {}
+    this.syncIcons();
+  }
+};
+
 const Shell = {
   MODULOS: [
     { key: 'dashboard', label: 'Dashboard', icon: 'chart-pie', href: 'dashboard.html' },
@@ -44,6 +74,14 @@ const Shell = {
     this.renderSidebar();
     this.renderHeader();
 
+    Theme.syncIcons();
+
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        Theme.toggle();
+      });
+    });
+
     const toggle = document.getElementById('sidebarToggle');
     if (toggle) {
       toggle.addEventListener('click', function () {
@@ -74,8 +112,11 @@ const Shell = {
           '<img src="img/Logo.png" alt="Logo El Progreso">' +
           '<span>El Progreso</span>' +
         '</div>' +
-        '<nav class="sidebar-nav">' + nav + '</nav>' +
+        '<nav class="sidebar-nav">' +
+          '<div class="nav-section">Módulos</div>' + nav +
+        '</nav>' +
         '<div class="sidebar-footer">' +
+          '<button class="btn-theme-toggle" data-theme-toggle><i class="fas fa-moon"></i> <span data-theme-label>Modo oscuro</span></button>' +
           '<button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>' +
         '</div>' +
       '</aside>';
@@ -92,6 +133,7 @@ const Shell = {
       '<button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>' +
       '<h1>' + titulo + '</h1>' +
       '<div class="header-right">' +
+        '<button class="btn-theme-icon" data-theme-toggle aria-label="Cambiar tema"><i class="fas fa-moon"></i></button>' +
         '<span class="user-info"><i class="fas fa-user"></i> <strong>' + this.user.nombre + '</strong></span>' +
         '<span class="role-badge ' + this.user.rol + '">' + Auth.rolLabel(this.user.rol) + '</span>' +
       '</div>';
